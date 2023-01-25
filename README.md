@@ -1,6 +1,40 @@
-<div class="markdown prose w-full break-words dark:prose-invert light"><h1>Kitchen Grocery Application</h1><p>A web application written in NestJS and Mikro-ORM that helps you keep track of the items in your pantry. With this application, you can easily see what is in your pantry, as well as additional notes on items stored such as expiration date and cooking times.</p><h2>Features</h2><ul><li><p><strong>Inventory Management:</strong> Keep track of the items in your pantry, including the quantity of each item and the date it was last updated.</p></li><li><p><strong>Expiration Dates:</strong> Add expiration dates to your pantry items to ensure that you use them before they go bad. The application will automatically remind you when an item is about to expire.</p></li><li><p><strong>Cooking Times:</strong> Add cooking times to your pantry items to help plan your meals. The application will show you the total cooking time for all of the items in your pantry.</p></li><li><p><strong>Search and Filter:</strong> Easily search and filter through your pantry items by name, expiration date, and cooking time.</p></li><li><p><strong>Reporting:</strong> Generate reports on your pantry inventory and usage to help you make informed decisions about your grocery shopping.</p></li></ul><h2>Getting started</h2><ol><li>Clone the repository and install the dependencies:</li></ol><pre><div class="bg-black mb-4 rounded-md"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans"><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre-wrap hljs language-bash">git <span class="hljs-built_in">clone</span> https://github.com/yourusername/kitchen-grocery-application.git
-<span class="hljs-built_in">cd</span> kitchen-grocery-application
+# Kitchen Grocery Application
+
+A web application written in NestJS and Mikro-ORM that helps you keep track of the items in your pantry. With this application, you can easily see what is in your pantry, as well as additional notes on items stored such as expiration date and cooking times.
+
+## Features
+
+- **Inventory Management:** Keep track of the items in your pantry, including the quantity of each item and the date it was last updated.
+- **Expiration Dates:** Add expiration dates to your pantry items to ensure that you use them before they go bad. The application will automatically remind you when an item is about to expire.
+- **Cooking Times:** Add cooking times to your pantry items to help plan your meals. The application will show you the total cooking time for all of the items in your pantry.
+- **Search and Filter:** Easily search and filter through your pantry items by name, expiration date, and cooking time.
+- **Reporting:** Generate reports on your pantry inventory and usage to help you make informed decisions about your grocery shopping.
+
+## Getting started
+
+1. Clone the repository and install the dependencies:
+
+```
+git clone https://github.com/yourusername/kitchen-grocery-application.git
+cd kitchen-grocery-application
 npm install
-</code></div></div></pre><ol start="2"><li><p>Create a new database and update the connection settings in the <code>ormconfig.json</code> file.</p></li><li><p>Run the migration command to create the necessary tables:</p></li></ol><pre><div class="bg-black mb-4 rounded-md"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans"><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre-wrap hljs">npx mikro-orm migration:run
-</code></div></div></pre><ol start="4"><li>Start the application:</li></ol><pre><div class="bg-black mb-4 rounded-md"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans"><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre-wrap hljs language-sql">npm run <span class="hljs-keyword">start</span>
-</code></div></div></pre><ol start="5"><li>The application will be available at <code>http://localhost:3000</code></li></ol><h2>Contribute</h2><p>We welcome contributions to the Kitchen Grocery Application. If you find a bug or have an idea for a new feature, please open an issue on GitHub</p></div>
+```
+
+2. Create a new database and update the connection settings in the `ormconfig.json` file.
+3. Run the migration command to create the necessary tables:
+
+```
+npx mikro-orm migration:run
+```
+
+1. Start the application:
+
+```
+npm run start
+```
+
+1. The application will be available at `http://localhost:3000`
+
+## Contribute
+
+We welcome contributions to the Kitchen Grocery Application. If you find a bug or have an idea for a new feature, please open an issue on GitHub
