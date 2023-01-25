@@ -10,7 +10,7 @@ export class AutoUpgradeModule {
 
     constructor(private readonly mikroOrm: MikroORM) {
         if (process.env.NODE_ENV !== 'development') {
-            this.logger.log('AutoUpgradeModule: Executing database upgrade');
+            this.logger.log('AutoUpgradeModule: Executing database upgrade.');
             mikroOrm.getMigrator().up();
             return;
         }

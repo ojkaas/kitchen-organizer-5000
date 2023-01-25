@@ -1,14 +1,14 @@
 import { Entity, PrimaryKey, Property, BeforeUpdate, BeforeCreate } from '@mikro-orm/core';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import bcrypt from 'bcrypt';
-import { BaseModel } from 'src/common/base.model';
+import * as argon from 'argon2';
+import { BaseModel } from 'src/common/models/base.model';
 
 @ObjectType()
 @Entity()
-export class User extends BaseModel<User, 'id'> {
+export class User extends BaseModel<User, 'uuid'> {
     @Field()
     @Property()
-    name!: string;
+    name?: string;
 
     @Field()
     @Property()
@@ -16,7 +16,7 @@ export class User extends BaseModel<User, 'id'> {
 
     @Field()
     @Property()
-    language?: string;
+    language?: string = "EN";
 
     @Property()
     password!: string;
@@ -25,6 +25,6 @@ export class User extends BaseModel<User, 'id'> {
     @BeforeCreate()
     @BeforeUpdate()
     async hashPassword() {
-        this.password = await bcrypt.hash(this.password, 10);
+        this.password = await argon.hash(this.password);
     }
 }

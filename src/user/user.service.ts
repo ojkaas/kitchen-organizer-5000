@@ -8,13 +8,14 @@ export class UserService {
     constructor(
         @InjectRepository(User) private userRepository: EntityRepository<User>) { }
 
-    async createUser(name, email, language): Promise<User> {
+    async createUser(email: string, password: string, name?: string, language?: string): Promise<User> {
         const user = this.userRepository.create({
             name,
             email,
             language,
+            password
         })
-        this.userRepository.persistAndFlush(user);
+        await this.userRepository.persistAndFlush(user);
         return user;
     }
 }

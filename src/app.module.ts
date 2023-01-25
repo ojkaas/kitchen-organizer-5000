@@ -4,8 +4,8 @@ import { ApolloDriver } from '@nestjs/apollo/dist/drivers';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { AuthModule } from './auth/auth.module';
-import { BinModule } from './bin/bin.module';
-import { GroceryItemModule } from './grocery-item/grocery-item.module';
+import { StorageContainerModule } from './storage-container/storage-container.module';
+import { PantryItemModule } from './pantry-item/pantry-item.module';
 import { UserModule } from './user/user.module';
 import { AutoUpgradeModule } from './util/migrate/auto-upgrade.module';
 
@@ -22,8 +22,8 @@ import { AutoUpgradeModule } from './util/migrate/auto-upgrade.module';
       driver: ApolloDriver
     }),
     MikroOrmModule.forRoot(),
-    BinModule,
-    GroceryItemModule,
+    StorageContainerModule,
+    PantryItemModule,
     AutoUpgradeModule
   ]
 })
