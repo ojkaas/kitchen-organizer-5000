@@ -1,4 +1,3 @@
-import { UniqueConstraintViolationException } from '@mikro-orm/core';
 import { FilterQuery } from '@mikro-orm/core/typings';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/postgresql';

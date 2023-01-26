@@ -4,11 +4,6 @@ import * as path from 'path';
 
 const config: Options = {
     type: 'postgresql',
-    host: '192.168.178.14',
-    port: 5435,
-    user: 'root',
-    password: 'root',
-    dbName: 'test_db',
     entities: ['dist/**/*.entity.js'],
     entitiesTs: ['src/**/*.entity.ts'],
     metadataProvider: TsMorphMetadataProvider,

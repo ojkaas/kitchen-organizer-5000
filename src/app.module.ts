@@ -10,10 +10,9 @@ import { StorageContainerModule } from './modules/storage-container/storage-cont
 import { UserModule } from './modules/user/user.module';
 import { UserController } from './modules/user/user.controller';
 import { AutoUpgradeModule } from './util/migrate/auto-upgrade.module';
-
+import { TestUtilModule } from './util/test/test-util.module';
 
 @Module({
-
   imports: [
     ConfigModule.forRoot({
       isGlobal: true
@@ -29,7 +28,8 @@ import { AutoUpgradeModule } from './util/migrate/auto-upgrade.module';
     MikroOrmModule.forRoot(),
     StorageContainerModule,
     PantryItemModule,
-    AutoUpgradeModule
+    AutoUpgradeModule,
+    TestUtilModule
   ],
 
   controllers: [UserController]
