@@ -1,7 +1,8 @@
-import { Entity, PrimaryKey, Property, BeforeUpdate, BeforeCreate } from '@mikro-orm/core';
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { BeforeCreate, BeforeUpdate, Entity, Property, Unique } from '@mikro-orm/core';
+import { Field, ObjectType } from '@nestjs/graphql';
 import * as argon from 'argon2';
-import { BaseModel } from 'src/common/models/base.model';
+import { BaseModel } from '../../core/entity/base.model';
+
 
 @ObjectType()
 @Entity()
@@ -12,6 +13,7 @@ export class User extends BaseModel<User, 'uuid'> {
 
     @Field()
     @Property()
+    @Unique()
     email!: string;
 
     @Field()

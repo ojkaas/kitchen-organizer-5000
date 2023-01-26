@@ -4,8 +4,8 @@ import * as path from 'path';
 
 const config: Options = {
     type: 'postgresql',
-    host: 'localhost',
-    port: 5432,
+    host: '192.168.178.14',
+    port: 5435,
     user: 'root',
     password: 'root',
     dbName: 'test_db',
