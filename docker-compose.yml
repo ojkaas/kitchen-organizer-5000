@@ -5,21 +5,21 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: test_db
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DBNAME}
     ports:
-      - '5432:5432'
+      - '${DB_PORT}:5432'
   test-db:
     container_name: pg_test_container
     image: postgres
     restart: always
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: test_db
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DBNAME}
     ports:
-      - '5435:5432'
+      - '${DB_TSTPORT}:5432'
   pgadmin:
     container_name: pgadmin4_container
     image: dpage/pgadmin4

@@ -10,7 +10,7 @@ export class UserService {
         @InjectRepository(User) private userRepository: EntityRepository<User>) { }
 
     async findUserByEmail(email: string) {
-        return this.findOne(email);
+        return this.findOne({ email: email });
     }
 
     async findUserByUUID(uuid: string) {

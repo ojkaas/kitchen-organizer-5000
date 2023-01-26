@@ -7,7 +7,7 @@ import * as pactum from 'pactum';
 import { AppModule } from '../src/app.module';
 import { UniqueConstraintFilter } from '../src/core/filters/unique-constraint.filter';
 import { AuthDto } from '../src/modules/auth/dto';
-import { DbCleanService } from '../src/util/test/db-clean.service';
+import { DbUtilsService } from '../src/util/test/db-util.service';
 import { TestUtilModule } from '../src/util/test/test-util.module';
 
 describe('App e2e', () => {
@@ -35,17 +35,13 @@ describe('App e2e', () => {
     );
     await app.init();
     await app.listen(3333);
-    const dbClean = app.get(DbCleanService);
-    dbClean.cleanDb();
-    //console.log(orm);
+    const dbUtils = app.get<DbUtilsService>(DbUtilsService);
+    await dbUtils.cleanDb();
+    //await dbUtils.runMigrator();
 
     pactum.request.setBaseUrl(
       'http://localhost:3333',
     );
-    //const em = app.get<EntityManager>(EntityManager);
-    //em.getDriver().getS
-    //const module = app.get<PostgreSqlMikroORM>(PostgreSqlMikroORM);
-    //module.getSchemaGenerator().refreshDatabase();
   });
 
   afterAll(() => {
@@ -117,7 +113,6 @@ describe('App e2e', () => {
           .post('/auth/signin')
           .expectStatus(400);
       });
-      /*
       it('should signin', () => {
         return pactum
           .spec()
@@ -125,7 +120,7 @@ describe('App e2e', () => {
           .withBody(dto)
           .expectStatus(200)
           .stores('userAt', 'access_token');
-      });*/
+      });
     });
   });
 });

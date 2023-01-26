@@ -2,9 +2,13 @@ import { MikroORM } from "@mikro-orm/core";
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class DbCleanService {
+export class DbUtilsService {
     constructor(private mikroOrm: MikroORM) { }
     cleanDb() {
-        this.mikroOrm.getSchemaGenerator().clearDatabase();
+        return this.mikroOrm.getSchemaGenerator().clearDatabase();
+    }
+
+    runMigrator() {
+        return this.mikroOrm.getMigrator().up();
     }
 }
