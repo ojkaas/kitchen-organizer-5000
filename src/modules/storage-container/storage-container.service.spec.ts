@@ -1,6 +1,6 @@
 import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { Test, TestingModule } from '@nestjs/testing';
-import { StorageContainer } from './storage.container.entity';
+import { StorageContainer } from './storage-container.entity';
 import { StorageContainerService } from './storage-container.service';
 
 let testSC = { name: "test" };

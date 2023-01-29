@@ -1,7 +1,7 @@
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
-import { StorageContainer } from './storage.container.entity';
+import { StorageContainer } from './storage-container.entity';
 
 
 @Injectable()

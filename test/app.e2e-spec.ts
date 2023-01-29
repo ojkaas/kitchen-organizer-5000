@@ -1,5 +1,3 @@
-import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { MikroORM } from '@mikro-orm/postgresql';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
@@ -50,8 +48,8 @@ describe('App e2e', () => {
 
   describe('Auth', () => {
     const dto: AuthDto = {
-      email: 'vlad@gmail.com',
-      password: '123',
+      email: 'test@test.com',
+      password: '12356',
     };
 
     describe('Signup', () => {
@@ -120,6 +118,19 @@ describe('App e2e', () => {
           .withBody(dto)
           .expectStatus(200)
           .stores('userAt', 'access_token');
+      });
+    });
+
+    describe('User', () => {
+      describe('Get me', () => {
+        it('should not have access to user', () => {
+          return pactum.spec().get('/users/me').expectStatus(401);
+        })
+        it('should get current user', () => {
+          return pactum.spec().withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          }).get('/users/me').expectStatus(200);
+        });
       });
     });
   });

@@ -1,6 +1,6 @@
 import { Query, Resolver, Args, Mutation } from "@nestjs/graphql";
 import { StorageContainerService } from "./storage-container.service";
-import { StorageContainer } from "./storage.container.entity";
+import { StorageContainer } from "./storage-container.entity";
 
 @Resolver(() => StorageContainer)
 export class StorageContainerResolver {

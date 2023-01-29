@@ -1,6 +1,7 @@
-import { Entity, Property } from '@mikro-orm/core';
+import { Entity, ManyToOne, Property } from '@mikro-orm/core';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { BaseModel } from '../../core/entity/base.model';
+import { StorageContainer } from '../storage-container/storage-container.entity';
 
 
 @ObjectType()
@@ -16,9 +17,20 @@ export class PantryItem extends BaseModel<PantryItem, 'uuid'> {
 
     @Field()
     @Property()
+    quantity: number = 1;
+
+    @Field()
+    @Property()
     barCode!: Date;
 
     @Field()
     @Property()
     cookingInstruction!: string;
+
+    @Field()
+    @Property()
+    category?: string;
+
+    @ManyToOne()
+    storageContainer?: StorageContainer;
 }
