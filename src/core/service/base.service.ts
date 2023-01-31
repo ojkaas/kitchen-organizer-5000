@@ -1,9 +1,8 @@
-import { BaseEntity, EntityName, Loaded, PlainObject, Reference } from "@mikro-orm/core";
-import { InjectRepository } from "@mikro-orm/nestjs";
-import { AbstractSqlDriver, EntityManager, EntityRepository } from "@mikro-orm/postgresql";
+import { Loaded, RequiredEntityData } from "@mikro-orm/core";
+import { EntityRepository } from "@mikro-orm/postgresql";
 import { BaseModel } from "../entity/base.model";
 
-export abstract class BaseCrudService<T extends BaseModel<T,'uuid'>> {
+export abstract class BaseCrudService<T extends BaseModel<T, 'uuid'>> {
 
     constructor(
         protected repository: EntityRepository<T>
@@ -22,7 +21,7 @@ export abstract class BaseCrudService<T extends BaseModel<T,'uuid'>> {
         return this.repository.findOne(uuid);
     }*/
 
-    async delete(entity: T): Promise<void> {    
+    async delete(entity: T): Promise<void> {
         return this.repository.remove(entity).flush();
     }
 
@@ -31,11 +30,15 @@ export abstract class BaseCrudService<T extends BaseModel<T,'uuid'>> {
         return this.em.getReference(dto ,dto.uuid);
     }*/
 
-    async insert(entity: T): Promise<T> {
-        return this.repository.create(entity);
+    async insert(entity: RequiredEntityData<T>): Promise<T> {
+        const result = this.repository.create(entity);
+        await this.repository.persistAndFlush(result);
+        return result;
     }
 
-    async updateOrInsert(entity: T): Promise<T> {
-        return this.repository.upsert(entity);
+    async updateOrInsert(entity: RequiredEntityData<T>): Promise<T> {
+        const result = this.repository.upsert(entity);
+        await this.repository.persistAndFlush(result);
+        return result;
     }
 }

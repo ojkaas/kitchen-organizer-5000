@@ -1,15 +1,16 @@
-import { Collection, Entity, ManyToMany, ManyToOne, Property } from '@mikro-orm/core';
+import { Collection, Entity, ManyToMany, Property, Unique } from '@mikro-orm/core';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { BaseModel } from '../../../core/entity/base.model';
-import { PantryItem } from '../pantry-item.entity';
+import { Product } from '../product/product.entity';
 
 @ObjectType()
 @Entity()
 export class PantryCategory extends BaseModel<PantryCategory, 'uuid'> {
     @Field()
+    @Unique()
     @Property()
     name!: string;
 
-    @ManyToMany(() => PantryItem, pantryItem => pantryItem.categories)
-    pantryItems = new Collection<PantryItem>(this);
+    @ManyToMany(() => Product, product => product.categories)
+    pantryItems = new Collection<Product>(this);
 }

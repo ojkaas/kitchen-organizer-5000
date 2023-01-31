@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { GroceryItemService as PantryItemService } from './pantry-item.service';
+import { PantryItemService } from './pantry-item.service';
 
 describe('PantryItemService', () => {
   let service: PantryItemService;

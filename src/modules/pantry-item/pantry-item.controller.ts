@@ -1,13 +1,16 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, Post, Body, ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
+import { instanceToPlain } from 'class-transformer';
+import { PantryItemDto } from './dto';
+import { PantryItem } from './pantry-item.entity';
 import { PantryItemService } from './pantry-item.service';
 
 @Controller('pantryitems')
-export class PantryItemController { 
-  constructor(private pantryitemsService: PantryItemService) {}
+export class PantryItemController {
+  constructor(private pantryitemsService: PantryItemService) { }
 
   @Get()
-  async getPantryItemsByCategory(@Query('category') categoryName: string) {
-    return this.pantryitemsService.findOne({ categories: categoryName });
+  async getPantryItems() {
+    return this.pantryitemsService.findAll();
     /*
     return this.pantryitemsService.findPantryItemsByCategory(categoryName);
     if (!category) {
@@ -15,5 +18,15 @@ export class PantryItemController {
     }
     const pantryItems = await this.pantryItemRepo.find({ categories: category });
     return pantryItems; */
+  }
+
+  @Get('/barcode/:barCode')
+  async getPantryItemsByCategory(@Param() pantryItemDto: PantryItemDto) {
+    return this.pantryitemsService.findProductByBarcode(pantryItemDto);
+  }
+
+  @Post()
+  async postPantryItem(@Body() pantryItemDto: PantryItemDto) {
+    return await this.pantryitemsService.insert(instanceToPlain(pantryItemDto));
   }
 }

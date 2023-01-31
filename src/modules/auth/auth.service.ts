@@ -22,7 +22,7 @@ export class AuthService {
     async signup(dto: AuthDto) {
         const { email, password, name, language } = dto;
         const user = await this.userService.createUser(email, password, name, language);
-        return this.signToken(user.uuid, user.email);;
+        return this.signToken(user.uuid, user.email);
     }
 
     async signToken(userId: string, email: string): Promise<{ access_token: string }> {
