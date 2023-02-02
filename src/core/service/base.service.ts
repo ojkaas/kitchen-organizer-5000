@@ -1,4 +1,4 @@
-import { Loaded, RequiredEntityData } from "@mikro-orm/core";
+import { EntityManager, Loaded, NotFoundError, RequiredEntityData } from "@mikro-orm/core";
 import { EntityRepository } from "@mikro-orm/postgresql";
 import { BaseModel } from "../entity/base.model";
 
@@ -16,13 +16,12 @@ export abstract class BaseCrudService<T extends BaseModel<T, 'uuid'>> {
         return this.repository.findOne(filter);
     }
 
-    /*
-    async findByUUID(uuid: string): Promise<Loaded<T, never>> {
-        return this.repository.findOne(uuid);
-    }*/
-
-    async delete(entity: T): Promise<void> {
-        return this.repository.remove(entity).flush();
+    async delete(filter = {}): Promise<void> {
+        try {
+            return await this.repository.remove(await this.repository.findOneOrFail(filter)).flush();
+        } catch (e) {
+            if(e instanceof NotFoundError) throw e;
+        }
     }
 
     /*
@@ -37,7 +36,7 @@ export abstract class BaseCrudService<T extends BaseModel<T, 'uuid'>> {
     }
 
     async updateOrInsert(entity: RequiredEntityData<T>): Promise<T> {
-        const result = this.repository.upsert(entity);
+        const result = await this.repository.upsert(entity);
         await this.repository.persistAndFlush(result);
         return result;
     }

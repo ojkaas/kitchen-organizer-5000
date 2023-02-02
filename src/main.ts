@@ -12,7 +12,7 @@ async function bootstrap() {
   app.enableShutdownHooks();
 
   // Add unique constraint filter
-  app.useGlobalFilters(new UniqueConstraintFilter(httpAdapter));
+  //app.useGlobalFilters(new UniqueConstraintFilter(httpAdapter));
 
   // Enable global validation
   app.useGlobalPipes(new ValidationPipe({

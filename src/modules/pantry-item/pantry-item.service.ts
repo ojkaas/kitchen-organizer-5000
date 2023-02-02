@@ -4,7 +4,6 @@ import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { BaseCrudService } from '../../core/service/base.service';
 import { OpenFoodService } from '../openfood/openfood.service';
-import { PantryCategory } from './category/pantry-category.entity';
 import { PantryItemDto } from './dto';
 import { ProductDto } from './dto/product.dto';
 import { PantryItem } from './pantry-item.entity';
@@ -14,7 +13,7 @@ export class PantryItemService extends BaseCrudService<PantryItem> {
 
     constructor(
         @InjectRepository(PantryItem) private pantryItemRepository: EntityRepository<PantryItem>,
-        @InjectRepository(PantryCategory) private pantryCategoryRepository: EntityRepository<PantryCategory>,
+
         private openFoodService: OpenFoodService
     ) {
         super(pantryItemRepository);

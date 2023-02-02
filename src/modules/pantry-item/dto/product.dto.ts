@@ -1,5 +1,7 @@
-import { IsDate, IsEAN, IsNumber, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsEAN, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
 import { BaseDto } from "../../../core/dto/base.dto";
+import { ProductCategoryDto } from "./product-category.dto";
 
 export class ProductDto extends BaseDto {
     @IsString()
@@ -14,7 +16,10 @@ export class ProductDto extends BaseDto {
     @IsOptional()
     cookingInstruction?: string;
 
-    categories?= [];
+    @IsOptional()
+    @Type(() => ProductCategoryDto)
+    @ValidateNested({ each:true })
+    categories?: ProductCategoryDto[];
 
     @IsOptional()
     @IsNumber()

@@ -1,3 +1,4 @@
+import { UuidType } from '@mikro-orm/core';
 import { FilterQuery } from '@mikro-orm/core/typings';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/postgresql';
@@ -13,7 +14,7 @@ export class UserService {
         return this.findOne({ email: email });
     }
 
-    async findUserByUUID(uuid: string) {
+    async findUserByUUID(uuid: UuidType) {
         return this.findOne(uuid);
     }
 

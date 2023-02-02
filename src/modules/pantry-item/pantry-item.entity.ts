@@ -1,8 +1,7 @@
-import { Collection, Entity, ManyToMany, ManyToOne, Property } from '@mikro-orm/core';
+import { Entity, ManyToOne, Property } from '@mikro-orm/core';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { BaseModel } from '../../core/entity/base.model';
 import { StorageContainer } from '../storage-container/storage-container.entity';
-import { PantryCategory } from './category/pantry-category.entity';
 import { Product } from './product/product.entity';
 
 

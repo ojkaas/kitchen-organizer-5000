@@ -8,12 +8,13 @@
       "columns": {
         "uuid": {
           "name": "uuid",
-          "type": "varchar(255)",
+          "type": "uuid",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "string"
+          "default": "gen_random_uuid()",
+          "mappedType": "uuid"
         },
         "created_at": {
           "name": "created_at",
@@ -23,6 +24,7 @@
           "primary": false,
           "nullable": false,
           "length": 6,
+          "default": "now()",
           "mappedType": "datetime"
         },
         "updated_at": {
@@ -33,72 +35,7 @@
           "primary": false,
           "nullable": false,
           "length": 6,
-          "mappedType": "datetime"
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        }
-      },
-      "name": "pantry_category",
-      "schema": "public",
-      "indexes": [
-        {
-          "columnNames": [
-            "name"
-          ],
-          "composite": false,
-          "keyName": "pantry_category_name_unique",
-          "primary": false,
-          "unique": true
-        },
-        {
-          "keyName": "pantry_category_pkey",
-          "columnNames": [
-            "uuid"
-          ],
-          "composite": false,
-          "primary": true,
-          "unique": true
-        }
-      ],
-      "checks": [],
-      "foreignKeys": {}
-    },
-    {
-      "columns": {
-        "uuid": {
-          "name": "uuid",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamptz(0)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 6,
-          "mappedType": "datetime"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamptz(0)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 6,
+          "default": "now()",
           "mappedType": "datetime"
         },
         "name": {
@@ -116,7 +53,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
+          "nullable": false,
           "mappedType": "string"
         },
         "cooking_instruction": {
@@ -132,6 +69,15 @@
       "name": "product",
       "schema": "public",
       "indexes": [
+        {
+          "columnNames": [
+            "bar_code"
+          ],
+          "composite": false,
+          "keyName": "product_bar_code_index",
+          "primary": false,
+          "unique": false
+        },
         {
           "columnNames": [
             "bar_code"
@@ -156,23 +102,92 @@
     },
     {
       "columns": {
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "default": "gen_random_uuid()",
+          "mappedType": "uuid"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "default": "now()",
+          "mappedType": "datetime"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "default": "now()",
+          "mappedType": "datetime"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        }
+      },
+      "name": "product_category",
+      "schema": "public",
+      "indexes": [
+        {
+          "columnNames": [
+            "name"
+          ],
+          "composite": false,
+          "keyName": "product_category_name_unique",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "keyName": "product_category_pkey",
+          "columnNames": [
+            "uuid"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {}
+    },
+    {
+      "columns": {
         "product_uuid": {
           "name": "product_uuid",
-          "type": "varchar(255)",
+          "type": "uuid",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "string"
+          "mappedType": "uuid"
         },
-        "pantry_category_uuid": {
-          "name": "pantry_category_uuid",
-          "type": "varchar(255)",
+        "product_category_uuid": {
+          "name": "product_category_uuid",
+          "type": "uuid",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "string"
+          "mappedType": "uuid"
         }
       },
       "name": "product_categories",
@@ -182,7 +197,7 @@
           "keyName": "product_categories_pkey",
           "columnNames": [
             "product_uuid",
-            "pantry_category_uuid"
+            "product_category_uuid"
           ],
           "composite": true,
           "primary": true,
@@ -204,16 +219,16 @@
           "deleteRule": "cascade",
           "updateRule": "cascade"
         },
-        "product_categories_pantry_category_uuid_foreign": {
-          "constraintName": "product_categories_pantry_category_uuid_foreign",
+        "product_categories_product_category_uuid_foreign": {
+          "constraintName": "product_categories_product_category_uuid_foreign",
           "columnNames": [
-            "pantry_category_uuid"
+            "product_category_uuid"
           ],
           "localTableName": "public.product_categories",
           "referencedColumnNames": [
             "uuid"
           ],
-          "referencedTableName": "public.pantry_category",
+          "referencedTableName": "public.product_category",
           "deleteRule": "cascade",
           "updateRule": "cascade"
         }
@@ -223,12 +238,13 @@
       "columns": {
         "uuid": {
           "name": "uuid",
-          "type": "varchar(255)",
+          "type": "uuid",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "string"
+          "default": "gen_random_uuid()",
+          "mappedType": "uuid"
         },
         "created_at": {
           "name": "created_at",
@@ -238,6 +254,7 @@
           "primary": false,
           "nullable": false,
           "length": 6,
+          "default": "now()",
           "mappedType": "datetime"
         },
         "updated_at": {
@@ -248,6 +265,7 @@
           "primary": false,
           "nullable": false,
           "length": 6,
+          "default": "now()",
           "mappedType": "datetime"
         },
         "name": {
@@ -289,12 +307,13 @@
       "columns": {
         "uuid": {
           "name": "uuid",
-          "type": "varchar(255)",
+          "type": "uuid",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "string"
+          "default": "gen_random_uuid()",
+          "mappedType": "uuid"
         },
         "created_at": {
           "name": "created_at",
@@ -304,6 +323,7 @@
           "primary": false,
           "nullable": false,
           "length": 6,
+          "default": "now()",
           "mappedType": "datetime"
         },
         "updated_at": {
@@ -314,16 +334,17 @@
           "primary": false,
           "nullable": false,
           "length": 6,
+          "default": "now()",
           "mappedType": "datetime"
         },
         "product_uuid": {
           "name": "product_uuid",
-          "type": "varchar(255)",
+          "type": "uuid",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "string"
+          "mappedType": "uuid"
         },
         "expiry_date": {
           "name": "expiry_date",
@@ -347,12 +368,12 @@
         },
         "storage_container_uuid": {
           "name": "storage_container_uuid",
-          "type": "varchar(255)",
+          "type": "uuid",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": true,
-          "mappedType": "string"
+          "mappedType": "uuid"
         }
       },
       "name": "pantry_item",
@@ -401,12 +422,13 @@
       "columns": {
         "uuid": {
           "name": "uuid",
-          "type": "varchar(255)",
+          "type": "uuid",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "string"
+          "default": "gen_random_uuid()",
+          "mappedType": "uuid"
         },
         "created_at": {
           "name": "created_at",
@@ -416,6 +438,7 @@
           "primary": false,
           "nullable": false,
           "length": 6,
+          "default": "now()",
           "mappedType": "datetime"
         },
         "updated_at": {
@@ -426,6 +449,7 @@
           "primary": false,
           "nullable": false,
           "length": 6,
+          "default": "now()",
           "mappedType": "datetime"
         },
         "name": {

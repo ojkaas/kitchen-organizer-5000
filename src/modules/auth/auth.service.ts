@@ -1,3 +1,4 @@
+import { UuidType } from "@mikro-orm/core";
 import { ForbiddenException, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
@@ -25,7 +26,7 @@ export class AuthService {
         return this.signToken(user.uuid, user.email);
     }
 
-    async signToken(userId: string, email: string): Promise<{ access_token: string }> {
+    async signToken(userId: UuidType, email: string): Promise<{ access_token: string }> {
         const payload = {
             sub: userId,
             email

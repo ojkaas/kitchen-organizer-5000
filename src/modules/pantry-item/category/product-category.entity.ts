@@ -5,7 +5,7 @@ import { Product } from '../product/product.entity';
 
 @ObjectType()
 @Entity()
-export class PantryCategory extends BaseModel<PantryCategory, 'uuid'> {
+export class ProductCategory extends BaseModel<ProductCategory, 'uuid'> {
     @Field()
     @Unique()
     @Property()
