@@ -2,9 +2,7 @@ import { UuidType } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from "@nestjs/passport";
-import { plainToClass } from 'class-transformer';
 import { ExtractJwt, Strategy } from "passport-jwt";
-import { AuthResponseDto } from '../dto';
 import { UserService } from './../../user/user.service';
 
 @Injectable()
@@ -19,6 +17,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     async validate(payload: { sub: UuidType; email: string }) {
         const user = await this.userService.findUserByUUID(payload.sub);
 
-        return plainToClass(AuthResponseDto, user);
+        return user.toJSON();
     }
 }

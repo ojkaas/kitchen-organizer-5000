@@ -21,8 +21,8 @@ export class AuthService {
 
     //@UseFilters(new UniqueConstraintFilter("User already exists"))
     async signup(dto: AuthDto) {
-        const { email, password, name, language } = dto;
-        const user = await this.userService.createUser(email, password, name, language);
+        const { email, password, name, language, houseReference } = dto;
+        const user = await this.userService.createUser(email, password, name, language, houseReference);
         return this.signToken(user.uuid, user.email);
     }
 

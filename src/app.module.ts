@@ -11,6 +11,7 @@ import { UserModule } from './modules/user/user.module';
 import { UserController } from './modules/user/user.controller';
 import { AutoUpgradeModule } from './util/migrate/auto-upgrade.module';
 import { TestUtilModule } from './util/test/test-util.module';
+import { HouseModule } from './modules/house/house.module';
 
 @Module({
   imports: [
@@ -29,7 +30,8 @@ import { TestUtilModule } from './util/test/test-util.module';
     StorageContainerModule,
     PantryItemModule,
     AutoUpgradeModule,
-    TestUtilModule
+    TestUtilModule,
+    HouseModule
   ],
 
   controllers: [UserController]

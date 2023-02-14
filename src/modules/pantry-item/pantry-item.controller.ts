@@ -1,6 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Post, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UseGuards, UseInterceptors } from '@nestjs/common';
 import { instanceToPlain } from 'class-transformer';
 import { NotFoundErrorFilter } from 'src/core/dbase/not-found-error.interceptor';
+import { GetUser } from '../auth/decorator';
+import { JwtGuard } from '../auth/guard';
+import { User } from '../user/user.entity';
 import { ProductCategory } from './category/product-category.entity';
 import { ProductCategoryService } from './category/product-category.service';
 import { PantryItemDto } from './dto';
@@ -8,13 +11,15 @@ import { PantryItemDeleteDto } from './dto/pantry-item.delete';
 import { PantryItemService } from './pantry-item.service';
 import { ProductService } from './product/product.service';
 
+@UseGuards(JwtGuard)
 @Controller('pantryitems')
 export class PantryItemController {
   constructor(private pantryitemsService: PantryItemService,private productService: ProductService, private productCategoryService: ProductCategoryService) { }
 
   @Get()
-  async getPantryItems() {
-    return this.pantryitemsService.findAll();
+  async getPantryItems(@GetUser() user: User) {
+
+    return this.pantryitemsService.findAll({ house: user.house});
     /*
     return this.pantryitemsService.findPantryItemsByCategory(categoryName);
     if (!category) {
@@ -36,7 +41,7 @@ export class PantryItemController {
   }
 
   @Post()
-  async postPantryItem(@Body() pantryItemDto: PantryItemDto) {
+  async postPantryItem(@GetUser() user: User, @Body() pantryItemDto: PantryItemDto) {
     let categories: ProductCategory[] = [];
     let product = pantryItemDto.product;
     let pantryItem = instanceToPlain(pantryItemDto);
@@ -57,7 +62,7 @@ export class PantryItemController {
     } else {
       pantryItem.product = pantryItem.productReference;
     }
-
+    pantryItem.house = user.house.uuid;
     return await this.pantryitemsService.insert(pantryItem);
   }
 }

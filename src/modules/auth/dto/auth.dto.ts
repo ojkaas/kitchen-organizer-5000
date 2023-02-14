@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty, IsString, IsISO31661Alpha2, IsOptional } from "class-validator";
+import { UuidType } from "@mikro-orm/core";
+import { IsEmail, IsNotEmpty, IsString, IsISO31661Alpha2, IsOptional, IsUUID } from "class-validator";
 
 export class AuthDto {
     @IsEmail()
@@ -16,4 +17,8 @@ export class AuthDto {
     @IsISO31661Alpha2()
     @IsOptional()
     language?: string;
+
+    @IsUUID()
+    @IsOptional()
+    houseReference?: UuidType;
 }

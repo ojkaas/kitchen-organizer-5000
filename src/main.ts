@@ -1,7 +1,7 @@
-import { ValidationPipe } from '@nestjs/common';
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { UniqueConstraintFilter } from './core/filters/unique-constraint.filter';
+import { MikroOrmSerializerInterceptor } from './decorators/interceptors/mikro-orm-serializer.interceptor';
 
 
 async function bootstrap() {
@@ -11,8 +11,8 @@ async function bootstrap() {
   // Starts listening for shutdown hooks
   app.enableShutdownHooks();
 
-  // Add unique constraint filter
-  //app.useGlobalFilters(new UniqueConstraintFilter(httpAdapter));
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)), new MikroOrmSerializerInterceptor())
+
 
   // Enable global validation
   app.useGlobalPipes(new ValidationPipe({
@@ -22,3 +22,4 @@ async function bootstrap() {
   await app.listen(3000);
 }
 bootstrap();
+
