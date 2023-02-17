@@ -12,6 +12,10 @@ import { UserController } from './modules/user/user.controller';
 import { AutoUpgradeModule } from './util/migrate/auto-upgrade.module';
 import { TestUtilModule } from './util/test/test-util.module';
 import { HouseModule } from './modules/house/house.module';
+import { CaslModule } from 'nest-casl';
+import { StorageLocationModule } from './modules/storage-location/storage-location.module';
+import { MailModule } from './modules/mail/mail.module';
+
 
 @Module({
   imports: [
@@ -27,11 +31,13 @@ import { HouseModule } from './modules/house/house.module';
       driver: ApolloDriver
     }),
     MikroOrmModule.forRoot(),
-    StorageContainerModule,
     PantryItemModule,
     AutoUpgradeModule,
     TestUtilModule,
-    HouseModule
+    HouseModule,
+    CaslModule.forRoot({}),
+    StorageLocationModule,
+    MailModule
   ],
 
   controllers: [UserController]

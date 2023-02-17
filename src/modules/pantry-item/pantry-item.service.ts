@@ -29,19 +29,4 @@ export class PantryItemService extends BaseCrudService<PantryItem> {
         let pantryItemResponseDto = plainToClass(PantryItemDto, pantryItem);
         return pantryItemResponseDto;
     }
-
-    /*
-    async loadOpenFoodModule() {
-        const { OpenFoodModule } = await import('../openfood/openfood.module');
-        const moduleRef = await this.lazyModuleLoader.load(() => OpenFoodModule);
-
-        const { OpenFoodService } = await import('../openfood/openfood.service');
-        this.openFoodService = moduleRef.get(OpenFoodService);
-        console.log("OpenFoodModule loaded");
-    }*/
-
-    /*
-    findOne(query: FilterQuery<PantryItem>) {
-        return this.pantryItemRepository.findOne(query);
-    }    */
 }

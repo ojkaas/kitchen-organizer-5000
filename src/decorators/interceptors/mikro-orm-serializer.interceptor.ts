@@ -27,14 +27,14 @@ export class MikroOrmSerializerInterceptor implements NestInterceptor {
   ): PlainLiteralObject | Array<PlainLiteralObject> {
     if (!isObject(response) || response instanceof StreamableFile) return response;
     return Array.isArray(response)
-      ? response.map((item) => this.transformToPOJO(item))
-      : this.transformToPOJO(response);
+      ? response.map((item) => this.transformToJSON(item))
+      : this.transformToJSON(response);
   }
 
   /**
-   * Transformation to POJO if argument is a BaseEntity instance
+   * Transformation to JSON if argument is a BaseEntity instance
    */
-  transformToPOJO(plainOrEntity: any): PlainLiteralObject {
-    return plainOrEntity instanceof BaseEntity ? plainOrEntity.toPOJO() : plainOrEntity;
+  transformToJSON(plainOrEntity: any): PlainLiteralObject {
+    return plainOrEntity instanceof BaseEntity ? plainOrEntity.toJSON() : plainOrEntity;
   }
 }

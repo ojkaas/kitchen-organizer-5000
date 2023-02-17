@@ -428,14 +428,115 @@
           "nullable": false,
           "mappedType": "string"
         },
-        "location": {
-          "name": "location",
+        "house_uuid": {
+          "name": "house_uuid",
+          "type": "uuid",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "uuid"
+        }
+      },
+      "name": "storage_location",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "storage_location_name_house_uuid_unique",
+          "columnNames": [
+            "name",
+            "house_uuid"
+          ],
+          "composite": true,
+          "primary": false,
+          "unique": true
+        },
+        {
+          "keyName": "storage_location_pkey",
+          "columnNames": [
+            "uuid"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "storage_location_house_uuid_foreign": {
+          "constraintName": "storage_location_house_uuid_foreign",
+          "columnNames": [
+            "house_uuid"
+          ],
+          "localTableName": "public.storage_location",
+          "referencedColumnNames": [
+            "uuid"
+          ],
+          "referencedTableName": "public.house",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "default": "gen_random_uuid()",
+          "mappedType": "uuid"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "default": "now()",
+          "mappedType": "datetime"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "default": "now()",
+          "mappedType": "datetime"
+        },
+        "name": {
+          "name": "name",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
           "mappedType": "string"
+        },
+        "location_uuid": {
+          "name": "location_uuid",
+          "type": "uuid",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "uuid"
+        },
+        "house_uuid": {
+          "name": "house_uuid",
+          "type": "uuid",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "uuid"
         }
       },
       "name": "storage_container",
@@ -452,7 +553,33 @@
         }
       ],
       "checks": [],
-      "foreignKeys": {}
+      "foreignKeys": {
+        "storage_container_location_uuid_foreign": {
+          "constraintName": "storage_container_location_uuid_foreign",
+          "columnNames": [
+            "location_uuid"
+          ],
+          "localTableName": "public.storage_container",
+          "referencedColumnNames": [
+            "uuid"
+          ],
+          "referencedTableName": "public.storage_location",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        },
+        "storage_container_house_uuid_foreign": {
+          "constraintName": "storage_container_house_uuid_foreign",
+          "columnNames": [
+            "house_uuid"
+          ],
+          "localTableName": "public.storage_container",
+          "referencedColumnNames": [
+            "uuid"
+          ],
+          "referencedTableName": "public.house",
+          "updateRule": "cascade"
+        }
+      }
     },
     {
       "columns": {
@@ -628,7 +755,7 @@
           "autoincrement": false,
           "primary": false,
           "nullable": true,
-          "default": "'EN'",
+          "default": "'NL'",
           "mappedType": "string"
         },
         "password": {
@@ -640,6 +767,16 @@
           "nullable": false,
           "mappedType": "string"
         },
+        "last_login": {
+          "name": "last_login",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 6,
+          "mappedType": "datetime"
+        },
         "house_uuid": {
           "name": "house_uuid",
           "type": "uuid",
@@ -648,6 +785,20 @@
           "primary": false,
           "nullable": false,
           "mappedType": "uuid"
+        },
+        "roles": {
+          "name": "roles",
+          "type": "text[]",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "enumItems": [
+            "admin",
+            "operator",
+            "customer"
+          ],
+          "mappedType": "array"
         }
       },
       "name": "user",

@@ -1,12 +1,15 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { HttpAdapterHost } from '@nestjs/core';
+import { ClassSerializerInterceptor, INestApplication, ValidationPipe } from '@nestjs/common';
+import { HttpAdapterHost, Reflector } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
 import * as pactum from 'pactum';
 import { AppModule } from '../src/app.module';
-import { UniqueConstraintFilter } from '../src/core/filters/unique-constraint.filter';
-import { AuthDto } from '../src/modules/auth/dto';
+import { MikroOrmSerializerInterceptor } from '../src/decorators/interceptors/mikro-orm-serializer.interceptor';
 import { DbUtilsService } from '../src/util/test/db-util.service';
 import { TestUtilModule } from '../src/util/test/test-util.module';
+import { house, lostpw, signin, signup, storageLocation, user } from './tests';
+import { MailhogClientService } from './tests/helpers/mail-client';
+import { DatabaseSeeder } from './tests/seeders/database.seeder';
+import { storageContainer } from './tests/storage-container-e2e';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -23,19 +26,23 @@ describe('App e2e', () => {
     // Starts listening for shutdown hooks
     app.enableShutdownHooks();
 
-    // Add unique constraint filter
-    app.useGlobalFilters(new UniqueConstraintFilter(httpAdapter));
+    app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)), new MikroOrmSerializerInterceptor())
 
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-      }),
-    );
+    // Enable global validation
+    app.useGlobalPipes(new ValidationPipe({
+      whitelist: true,
+      transform: true,
+    }));
+
     await app.init();
     await app.listen(3333);
     const dbUtils = app.get<DbUtilsService>(DbUtilsService);
     await dbUtils.cleanDb();
-    //await dbUtils.runMigrator();
+    const seeder = dbUtils.getSeeder();
+    // Seed using a seeder defined by you
+    await seeder.seed(DatabaseSeeder);
+
+    MailhogClientService.getInstance();
 
     pactum.request.setBaseUrl(
       'http://localhost:3333',
@@ -46,92 +53,18 @@ describe('App e2e', () => {
     app.close();
   });
 
-  describe('Auth', () => {
-    const dto: AuthDto = {
-      email: 'test@test.com',
-      password: '12356',
-    };
+  describe('Signup', signup);
 
-    describe('Signup', () => {
-      it('should throw if email empty', () => {
-        return pactum
-          .spec()
-          .post('/auth/signup')
-          .withBody({
-            password: dto.password,
-          })
-          .expectStatus(400);
-      });
-      it('should throw if password empty', () => {
-        return pactum
-          .spec()
-          .post('/auth/signup')
-          .withBody({
-            email: dto.email,
-          })
-          .expectStatus(400);
-      });
-      it('should throw if no body provided', () => {
-        return pactum
-          .spec()
-          .post('/auth/signup')
-          .expectStatus(400);
-      });
-      it('should signup', () => {
-        return pactum
-          .spec()
-          .post('/auth/signup')
-          .withBody(dto)
-          .expectStatus(201);
-      });
-    });
+  describe('Signin', signin);
 
-    describe('Signin', () => {
-      it('should throw if email empty', () => {
-        return pactum
-          .spec()
-          .post('/auth/signin')
-          .withBody({
-            password: dto.password,
-          })
-          .expectStatus(400);
-      });
-      it('should throw if password empty', () => {
-        return pactum
-          .spec()
-          .post('/auth/signin')
-          .withBody({
-            email: dto.email,
-          })
-          .expectStatus(400);
-      });
-      it('should throw if no body provided', () => {
-        return pactum
-          .spec()
-          .post('/auth/signin')
-          .expectStatus(400);
-      });
-      it('should signin', () => {
-        return pactum
-          .spec()
-          .post('/auth/signin')
-          .withBody(dto)
-          .expectStatus(200)
-          .stores('userAt', 'access_token');
-      });
-    });
+  describe('Lost password', lostpw);
 
-    describe('User', () => {
-      describe('Get me', () => {
-        it('should not have access to user', () => {
-          return pactum.spec().get('/users/me').expectStatus(401);
-        })
-        it('should get current user', () => {
-          return pactum.spec().withHeaders({
-            Authorization: 'Bearer $S{userAt}',
-          }).get('/users/me').expectStatus(200);
-        });
-      });
-    });
-  });
+  describe('User', user);
+
+  describe('House', house);
+
+  describe('StorageLocation', storageLocation);
+
+  describe('StorageContainer', storageContainer);
+
 });

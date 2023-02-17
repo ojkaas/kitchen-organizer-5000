@@ -13,10 +13,11 @@ export class StorageContainerResolver {
     }
 
     //Mutations
+    /*
     @Mutation(() => StorageContainer)
     createStorageContainer(
         @Args('name') name: string,
     ) {
         return this.scService.createStorageContainer(name);
-    }
+    }*/
 }

@@ -1,3 +1,3 @@
-import { BaseDto } from "src/core/dto/base.dto";
+import { BaseDto } from "../../../core/dto/base.dto";
 
-export class PantryItemDeleteDto extends BaseDto {}
+export class PantryItemDeleteDto extends BaseDto { }

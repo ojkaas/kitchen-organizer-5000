@@ -13,11 +13,10 @@ async function bootstrap() {
 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)), new MikroOrmSerializerInterceptor())
 
-
   // Enable global validation
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
-    transform: true
+    transform: true,
   }));
   await app.listen(3000);
 }

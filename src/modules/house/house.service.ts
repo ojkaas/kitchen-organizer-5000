@@ -2,9 +2,7 @@ import { UuidType } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
-import { BaseCrudService } from 'src/core/service/base.service';
-import { CreateHouseDto } from './dto/create-house.dto';
-import { UpdateHouseDto } from './dto/update-house.dto';
+import { BaseCrudService } from '../../core/service/base.service';
 import { House } from './entities/house.entity';
 import { Invite } from './submodules/entities/invite.entity';
 
@@ -13,7 +11,7 @@ export class HouseService extends BaseCrudService<House> {
 
   constructor(@InjectRepository(House)
   private readonly houseRepository: EntityRepository<House>,
-  private readonly entityManager: EntityManager) {
+    private readonly entityManager: EntityManager) {
     super(houseRepository);
   }
 

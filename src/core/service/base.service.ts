@@ -1,4 +1,5 @@
-import { EntityManager, Loaded, NotFoundError, RequiredEntityData } from "@mikro-orm/core";
+import { EntityAssigner, EntityDTO, EntityManager, Loaded, NotFoundError, RequiredEntityData } from "@mikro-orm/core";
+import { FindOneOptions } from "@mikro-orm/core/drivers";
 import { EntityRepository } from "@mikro-orm/postgresql";
 import { BaseModel } from "../entity/base.model";
 
@@ -9,19 +10,20 @@ export abstract class BaseCrudService<T extends BaseModel<T, 'uuid'>> {
     ) { }
 
     async findAll(filter = {}): Promise<Loaded<T>[]> {
-        return this.repository.findAll(filter);
+        return await this.repository.findAll(filter);
     }
 
-    async findOne(filter = {}): Promise<T> {
-        return this.repository.findOne(filter);
+
+    async findOne(filter = {}, options?: FindOneOptions<T>): Promise<T> {
+        return await this.repository.findOneOrFail(filter, options);
     }
 
     async delete(filter = {}): Promise<void> {
-        try {
-            return await this.repository.remove(await this.repository.findOneOrFail(filter)).flush();
-        } catch (e) {
-            if(e instanceof NotFoundError) throw e;
-        }
+        return await this.repository.remove(await this.repository.findOneOrFail(filter)).flush();
+    }
+
+    async deleteByEntity(object: T): Promise<void> {
+        return await this.repository.remove(object).flush();
     }
 
     /*
@@ -39,5 +41,15 @@ export abstract class BaseCrudService<T extends BaseModel<T, 'uuid'>> {
         const result = await this.repository.upsert(entity);
         await this.repository.persistAndFlush(result);
         return result;
+    }
+
+    async update(entity: T, dto: Partial<EntityDTO<T>>): Promise<T> {
+        EntityAssigner.assign(entity, dto);
+        this.repository.flush();
+        return entity;
+    }
+
+    async flush() {
+        this.repository.flush()
     }
 }

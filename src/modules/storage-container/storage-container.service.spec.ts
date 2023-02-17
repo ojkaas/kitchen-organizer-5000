@@ -8,7 +8,7 @@ let sc = new StorageContainer();
 sc.name = testSC.name;
 
 
-describe('BinService', () => {
+describe('StorageContainerService', () => {
   let service: StorageContainerService;
 
   const mockedRepo = {
