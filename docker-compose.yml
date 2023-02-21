@@ -39,6 +39,6 @@ services:
       MH_MAILDIR_PATH: /tmp
     volumes:
       - maildir:/tmp
-    command: -invite-jim=1 -jim-accept=0.50
+    #command: -invite-jim=1 -jim-accept=0.50
 volumes:
   maildir: {}

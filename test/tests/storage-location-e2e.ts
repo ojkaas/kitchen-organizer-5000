@@ -46,6 +46,25 @@ export function storageLocation() {
                 .get('/storagelocations/$S{storageLocationUuid}/')
                 .expectStatus(200);
         });
+        it('should retrieve all storage locations of user', () => {
+            return pactum
+                .spec().withHeaders(getAuthHeaders())
+                .get('/storagelocations/')
+                .expectStatus(200).expectJsonLength(1);
+        });
+        it('should retrieve all storage locations of user based on query', () => {
+            return pactum
+                .spec().withHeaders(getAuthHeaders())
+                .get('/storagelocations/?name=idge')
+                .expectStatus(200).expectJsonLength(1);
+        });
+        it('should retrieve no storage locations of user based on no result query', () => {
+            return pactum
+                .spec().withHeaders(getAuthHeaders())
+                .get('/storagelocations/?name=Bla')
+                .expectStatus(200).expectJsonLength(0);
+        });
+        
     });
     describe('Update storage location', () => {
         it('should throw with empty name', () => {

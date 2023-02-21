@@ -11,16 +11,17 @@ export class House extends BaseModel<House, 'uuid'> {
     @Property()
     name: string;
 
-    @OneToMany(() => User, user => user.house, { eager: true })
+    @OneToMany(() => User, user => user.house, { eager: true, hidden: true })
     users = new Collection<User>(this);
 
     @OneToMany(() => Invite, invite => invite.house)
     invites = new Collection<Invite>(this);
 
     //Need to return a simple collection for permission checks
+    @Property({ persist: false })
     get usersAsList() {
         if (this.users) {
-            return this.users.getItems();
+            return this.users.getItems().map(user => ({ uuid: user.uuid }));
         } else {
             return [];
         }

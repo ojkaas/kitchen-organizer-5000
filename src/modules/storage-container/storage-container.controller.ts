@@ -1,19 +1,18 @@
-import { Body, Controller, Delete, Get, HttpStatus, Patch, Post, UseGuards, UsePipes } from '@nestjs/common';
-import { HttpCode, Put } from '@nestjs/common/decorators';
+import { Body, Controller, Delete, Get, HttpStatus, Patch, Post, UseGuards } from '@nestjs/common';
+import { HttpCode, Put, Query, UseInterceptors } from '@nestjs/common/decorators';
 import { ValidationPipe } from '@nestjs/common/pipes';
-import { AccessGuard, AccessService, Actions, CaslSubject, SubjectProxy, UseAbility } from 'nest-casl';
+import { AccessGuard, Actions, CaslSubject, UseAbility } from 'nest-casl';
+import { NotFoundErrorFilter } from '../../core/dbase/not-found-error.interceptor';
+import { QueryBuilderHelper } from '../../core/dbase/query/query-builder.helper';
 import { UUIDDto } from '../../core/dto/uuid.dto';
 import { BodyWithUserHouse } from '../../decorators/controller/user-house-to-body.decorator';
 import { UnwrapCaslSubjectPipe } from '../../decorators/pipes/unwrap-casl-subject.pipe';
 
 import { GetUser } from '../auth/decorator';
 import { AuthResponseDto } from '../auth/dto';
-import { AuthContextDto } from '../auth/dto/auth-context.dto';
 import { JwtGuard } from '../auth/guard';
-import { StorageLocation } from '../storage-location/entities/storage-location.entity';
-import { StorageLocationHook } from '../storage-location/hook/storage-location.hook';
-import { StorageLocationService } from '../storage-location/storage-location.service';
 import { CreateStorageContainerDto } from './dto/create-storage-container.dto';
+import { QueryStorageContainerDto } from './dto/query-storage-container.dto';
 import { UpdateStorageContainerDto } from './dto/update-storage-container.dto';
 import { StorageContainerHook } from './hook/storage-container.hook';
 import { StorageContainer } from './storage-container.entity';
@@ -23,7 +22,7 @@ import { StorageContainerService } from './storage-container.service';
 @UseGuards(JwtGuard)
 @Controller('storagecontainers')
 export class StorageContainerController {
-    constructor(private readonly storageContainerService: StorageContainerService, private accessService: AccessService, private storageLocationSerivce: StorageLocationService) { }
+    constructor(private readonly storageContainerService: StorageContainerService, private qbHelper: QueryBuilderHelper) { }
 
     @Post()
     create(@BodyWithUserHouse(new ValidationPipe({
@@ -34,16 +33,11 @@ export class StorageContainerController {
         return this.storageContainerService.insert(createStorageContainerDto);
     }
 
-    @Post(':uuid/location')
-    @UseGuards(AccessGuard)
-    @UseAbility(Actions.read, StorageContainer, StorageContainerHook)
-    async findAll(@GetUser() user: AuthContextDto,
-        @Body() storageLocationReference: UUIDDto,
-        @CaslSubject(UnwrapCaslSubjectPipe) storageContainer: StorageContainer) {
-        const storageLocation = await this.storageLocationSerivce.findOne({ uuid: storageLocationReference.uuid }, { populate: ['house'] as never })
-        const check = this.accessService.hasAbility(user, Actions.read, storageLocation);
-        console.log("CHECK: " + check);
-        //return this.storageContainerService.linkLocation(storageContainer, storageLocation);
+    @Get()
+    findAll(@GetUser() user: AuthResponseDto, @Query() dto: UpdateStorageContainerDto) {
+        const dtoWithHousePredefined:QueryStorageContainerDto = {...dto, house: user.house}
+        const query = this.qbHelper.convertDto(dtoWithHousePredefined);
+        return this.storageContainerService.find(query);
     }
 
     @Get(':uuid')
@@ -68,5 +62,23 @@ export class StorageContainerController {
     @UseAbility(Actions.delete, StorageContainer, StorageContainerHook)
     async remove(@CaslSubject(UnwrapCaslSubjectPipe) storageContainer: StorageContainer) {
         return this.storageContainerService.deleteByEntity(storageContainer);
+    }
+
+    @Put(':uuid/location')
+    @UseGuards(AccessGuard)
+    @UseAbility(Actions.read, StorageContainer, StorageContainerHook)
+    @UseInterceptors(NotFoundErrorFilter)
+    async linkStorageLocation(
+        @Body() storageLocationReference: UUIDDto,
+        @CaslSubject(UnwrapCaslSubjectPipe) storageContainer: StorageContainer) {
+        
+        return this.storageContainerService.linkStorageLocation(storageContainer,storageLocationReference);
+    }
+
+    @Delete(':uuid/location')
+    @UseGuards(AccessGuard)
+    @UseAbility(Actions.read, StorageContainer, StorageContainerHook)
+    async clearStorageLocation(@CaslSubject(UnwrapCaslSubjectPipe) storageContainer: StorageContainer) {
+        return this.storageContainerService.clearStorageLocation(storageContainer);
     }
 }

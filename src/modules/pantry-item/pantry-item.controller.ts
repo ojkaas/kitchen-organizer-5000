@@ -19,7 +19,7 @@ export class PantryItemController {
 
   @Get()
   async getPantryItems(@GetUser() user: User) {
-    return this.pantryitemsService.findAll({ house: user.house });
+    return this.pantryitemsService.find();
   }
 
   @Get('/barcode/:barCode')

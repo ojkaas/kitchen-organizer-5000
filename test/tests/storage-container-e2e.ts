@@ -1,5 +1,5 @@
 import * as pactum from 'pactum';
-import { newStorageContainer } from './data';
+import { newStorageContainer, newStorageLocation } from './data';
 import { getAuthHeaders, getExistingUserAuthHeaders } from './helpers';
 
 export function storageContainer() {
@@ -46,6 +46,24 @@ export function storageContainer() {
                 .get('/storagecontainers/$S{storageContainerUuid}/')
                 .expectStatus(200);
         });
+        it('should retrieve all storage containers of user', () => {
+            return pactum
+                .spec().withHeaders(getAuthHeaders())
+                .get('/storagecontainers/')
+                .expectStatus(200).expectJsonLength(1);
+        });
+        it('should retrieve all storage containers of user based on query', () => {
+            return pactum
+                .spec().withHeaders(getAuthHeaders())
+                .get('/storagecontainers/?name=Box')
+                .expectStatus(200).expectJsonLength(1);
+        });
+        it('should retrieve no storage containers of user based on no result query', () => {
+            return pactum
+                .spec().withHeaders(getAuthHeaders())
+                .get('/storagecontainers/?name=Bla')
+                .expectStatus(200).expectJsonLength(0);
+        });
     });
     describe('Update storage container', () => {
         it('should throw with empty name', () => {
@@ -59,6 +77,30 @@ export function storageContainer() {
                 .spec().withHeaders(getAuthHeaders())
                 .patch('/storagecontainers/$S{storageContainerUuid}/').withBody({ name: 'ContainerA' })
                 .expectStatus(200).expectJson('name', 'ContainerA');
+        });
+    });
+    describe('Link/unlink storage location', () => {
+        it('should throw when location uuid is empty', () => {
+            return pactum
+                .spec().withHeaders(getAuthHeaders())
+                .put('/storagecontainers/$S{storageContainerUuid}/location')
+                .expectStatus(400);
+        });
+        it('should link location', async () => {
+            await pactum
+                .spec()
+                .post('/storagelocations')
+                .withHeaders(getAuthHeaders())
+                .withBody(newStorageLocation)
+                .expectStatus(201).stores('newStorageLocationUuid', 'uuid');
+
+
+            return pactum
+                .spec().withHeaders(getAuthHeaders())
+                .put('/storagecontainers/$S{storageContainerUuid}/location')
+                .withBody({ uuid: '$S{newStorageLocationUuid}' })
+                .expectStatus(200)
+                .expectJson('location', '$S{newStorageLocationUuid}');
         });
     });
     describe('Delete storage container', () => {

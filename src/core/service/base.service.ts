@@ -1,4 +1,4 @@
-import { EntityAssigner, EntityDTO, EntityManager, Loaded, NotFoundError, RequiredEntityData } from "@mikro-orm/core";
+import { EntityAssigner, EntityDTO, EntityManager, FilterQuery, Loaded, NotFoundError, RequiredEntityData } from "@mikro-orm/core";
 import { FindOneOptions } from "@mikro-orm/core/drivers";
 import { EntityRepository } from "@mikro-orm/postgresql";
 import { BaseModel } from "../entity/base.model";
@@ -9,8 +9,8 @@ export abstract class BaseCrudService<T extends BaseModel<T, 'uuid'>> {
         protected repository: EntityRepository<T>
     ) { }
 
-    async findAll(filter = {}): Promise<Loaded<T>[]> {
-        return await this.repository.findAll(filter);
+    async find(filter:FilterQuery<T> = {}): Promise<Loaded<T>[]> {
+        return await this.repository.find(filter);
     }
 
 

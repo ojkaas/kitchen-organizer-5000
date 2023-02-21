@@ -3,6 +3,7 @@ import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
 import * as path from 'path';
 
 const config: Options = {
+    debug: ['query','query-params'],
     type: 'postgresql',
     entities: ['dist/**/*.entity.js'],
     entitiesTs: ['src/**/*.entity.ts'],

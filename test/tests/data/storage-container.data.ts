@@ -7,6 +7,5 @@ export const newStorageContainer: CreateStorageContainerDto = {
 };
 
 export const changeStorageContainer: UpdateStorageContainerDto = {
-    name: 'OtherBox',
-    house: undefined
+    name: 'OtherBox'
 };

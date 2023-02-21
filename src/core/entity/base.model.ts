@@ -13,6 +13,6 @@ export abstract class BaseModel<T extends object, PK extends keyof T> extends Ba
     createdAt: Date = new Date();
 
     @Field()
-    @Property({ onUpdate: () => { new Date();}, defaultRaw: 'now()' })
+    @Property({ onUpdate: () => new Date(), defaultRaw: 'now()' })
     updatedAt: Date = new Date();
 }
